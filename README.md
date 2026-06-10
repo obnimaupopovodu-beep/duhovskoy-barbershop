@@ -1,33 +1,54 @@
 # Duhovskoy Barbershop
 
-Премиум-барбершоп на Духовском переулке, Москва.
+Премиум барбершоп на Духовском переулке — сайт на Next.js 15.
 
-## Сайт
+## Стек
 
-Одностраничный лендинг для премиум-барбершопа. Создан с нуля.
+- **Next.js 15** (App Router)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Motion** (анимации)
+- **Lucide React** (иконки)
+- **next/font** — Cormorant Garamond + Inter
 
-### Стек
-- Чистый HTML5 + CSS3 + Vanilla JS
-- Шрифты: Cormorant Garamond (display) + Inter (body)
-- Без фреймворков и билдеров
+## Старт
 
-### Секции
-- Hero с анимацией
-- Статистика с счётчиком
-- Услуги (6 карточек с ценами)
-- Мастера
-- О нас
-- Галерея
-- Запись / CTA
-- Футер с контактами
+```bash
+npm install
+npm run dev
+```
 
-### Функции
-- Светлая / тёмная тема
-- Scroll reveal анимации
-- Адаптивная верстка (mobile-first)
-- Анимированный счётчик цифр
-- Мобильная навигация
+Открыть [http://localhost:3000](http://localhost:3000)
 
-## Разработка
+## Деплой
 
-Откройте `index.html` в браузере.
+Проект готов к деплою на [Vercel](https://vercel.com):
+
+```bash
+npx vercel
+```
+
+## Структура
+
+```
+src/
+├── app/
+│   ├── layout.tsx       # Root layout + шрифты + metadata
+│   ├── page.tsx         # Главная страница
+│   └── globals.css      # Design tokens + Tailwind
+└── components/
+    ├── ui/
+    │   ├── Header.tsx
+    │   ├── Logo.tsx
+    │   └── ThemeToggle.tsx
+    └── sections/
+        ├── Hero.tsx
+        ├── Stats.tsx
+        ├── Services.tsx
+        ├── Masters.tsx
+        ├── About.tsx
+        ├── Gallery.tsx
+        ├── Booking.tsx
+        ├── Contacts.tsx
+        └── Footer.tsx
+```
