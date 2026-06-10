@@ -7,6 +7,12 @@ export function About() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px 0px" });
 
+  const facts = [
+    { v: "2016", l: "Год основания" },
+    { v: "Тверской р-н", l: "Район" },
+    { v: "Пн–Вс", l: "Работаем" },
+  ];
+
   return (
     <section
       id="about"
@@ -50,7 +56,6 @@ export function About() {
             sizes="(max-width: 1024px) 100vw, 50vw"
             style={{ objectFit: "cover" }}
           />
-          {/* floating quote card */}
           <div
             style={{
               position: "absolute",
@@ -75,7 +80,7 @@ export function About() {
                 marginBottom: "0.75rem",
               }}
             >
-              «Мы создаём &nbsp;образ, а не просто стрижём»
+              &laquo;Мы создаём образ, а не просто стрижём&raquo;
             </p>
             <span
               style={{
@@ -103,11 +108,7 @@ export function About() {
             }}
           >
             <div
-              style={{
-                width: 32,
-                height: 1,
-                background: "var(--color-primary)",
-              }}
+              style={{ width: 32, height: 1, background: "var(--color-primary)" }}
               aria-hidden
             />
             <span
@@ -136,7 +137,7 @@ export function About() {
               marginBottom: "1.5rem",
             }}
           >
-            Место,&nbsp;где{" "}
+            Место, где{" "}
             <em style={{ fontStyle: "italic", color: "var(--color-primary)" }}>
               детали
             </em>{" "}
@@ -186,11 +187,7 @@ export function About() {
               paddingTop: "2rem",
             }}
           >
-            {[
-              { v: "2016", l: "Год основания" },
-              { v: "Тверской р-н", l: "Район» },
-              { v: "Пн–Вс", l: "Работаем" },
-            ].map((item) => (
+            {facts.map((item) => (
               <div key={item.l}>
                 <span
                   style={{
