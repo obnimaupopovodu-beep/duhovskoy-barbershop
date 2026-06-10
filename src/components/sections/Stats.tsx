@@ -1,120 +1,104 @@
 "use client";
+import { motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-const STATS = [
-  { number: 8, suffix: "", label: "Лет опыта" },
-  { number: 12, suffix: "", label: "Мастеров" },
-  { number: 4800, suffix: "+", label: "Клиентов в год" },
-  { number: 98, suffix: "%", label: "Довольных клиентов" },
-];
-
-function useCounter(target: number, active: boolean, duration = 1800) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!active) return;
-    const start = performance.now();
-    const frame = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(ease * target));
-      if (progress < 1) requestAnimationFrame(frame);
-    };
-    requestAnimationFrame(frame);
-  }, [active, target, duration]);
-  return value;
-}
-
-function StatItem({
-  number,
-  suffix,
-  label,
-  delay,
-}: (typeof STATS)[0] & { delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(false);
-  const value = useCounter(number, active);
+function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const [val, setVal] = useState(0);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setActive(true);
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+    if (!inView) return;
+    let start = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setVal(target); clearInterval(timer); }
+      else setVal(Math.floor(start));
+    }, 35);
+    return () => clearInterval(timer);
+  }, [inView, target]);
 
   return (
-    <div
-      ref={ref}
-      style={{
-        padding: "1rem 1.5rem",
-        textAlign: "center",
-        borderRight: "1px solid var(--color-divider)",
-        opacity: 0,
-        animation: `fadeInStat 0.6s ease ${delay}ms forwards`,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "var(--text-2xl)",
-          fontWeight: 400,
-          color: "var(--color-primary)",
-          display: "block",
-          lineHeight: 1,
-          marginBottom: "0.25rem",
-        }}
-      >
-        {value.toLocaleString("ru-RU")}
-        {suffix}
-      </span>
-      <span
-        style={{
-          fontSize: "var(--text-xs)",
-          color: "var(--color-text-muted)",
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <style>{`@keyframes fadeInStat { to { opacity: 1; } }`}</style>
-    </div>
+    <span ref={ref}>
+      {val}
+      {suffix}
+    </span>
   );
 }
 
+const STATS = [
+  { target: 8, suffix: "+", label: "Лет опыта" },
+  { target: 4200, suffix: "+", label: "Довольных клиентов" },
+  { target: 6, suffix: "", label: "Мастеров" },
+  { target: 98, suffix: "%", label: "Возврат гостей" },
+];
+
 export function Stats() {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
+
   return (
-    <div
+    <section
+      ref={ref}
+      aria-label="Ключевые показатели"
       style={{
+        borderTop: "1px solid oklch(from var(--color-text) l c h / 0.07)",
+        borderBottom: "1px solid oklch(from var(--color-text) l c h / 0.07)",
+        padding: "clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 4rem)",
         background: "var(--color-surface)",
-        borderTop: "1px solid var(--color-divider)",
-        borderBottom: "1px solid var(--color-divider)",
-        padding: "2rem 0",
       }}
-      aria-label="Наши показатели"
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1100,
           margin: "0 auto",
-          padding: "0 clamp(1.5rem, 5vw, 4rem)",
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "2rem",
         }}
         className="stats-grid"
       >
         {STATS.map((s, i) => (
-          <StatItem key={s.label} {...s} delay={i * 100} />
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.375rem",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-playfair, Georgia, serif)",
+                fontSize: "var(--text-2xl)",
+                fontWeight: 300,
+                color: "var(--color-text)",
+                lineHeight: 1,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              <Counter target={s.target} suffix={s.suffix} />
+            </span>
+            <span
+              style={{
+                fontSize: "var(--text-xs)",
+                color: "var(--color-text-muted)",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+              }}
+            >
+              {s.label}
+            </span>
+          </motion.div>
         ))}
       </div>
       <style>{`
-        @media (max-width: 768px) {
-          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
+        @media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
       `}</style>
-    </div>
+    </section>
   );
 }

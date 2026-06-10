@@ -1,225 +1,289 @@
 "use client";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
-import { Scissors, Sparkles, Flame, Wind, Star, Baby } from "lucide-react";
 
 const SERVICES = [
   {
-    icon: Scissors,
+    num: "01",
     name: "Мужская стрижка",
-    desc: "Авторская техника, адаптированная под структуру и тип волос. Мытьё головы, стрижка, укладка.",
-    price: "2 000",
+    desc: "Авторская техника, адаптированная под структуру и тип волос. Мытьё, стрижка, укладка.",
+    duration: "60 мин",
+    price: "2 000",
   },
   {
-    icon: Sparkles,
+    num: "02",
     name: "Уход за бородой",
     desc: "Оформление, моделирование, горячее полотенце и питательные масла. Идеальные контуры.",
-    price: "1 500",
+    duration: "45 мин",
+    price: "1 500",
   },
   {
-    icon: Flame,
+    num: "03",
     name: "Классическое бритьё",
-    desc: "Опасная бритва, горячий компресс, пена ручного взбивания. Ритуал для настоящих джентльменов.",
-    price: "2 500",
+    desc: "Опасная бритва, горячий компресс, пена ручного взбивания. Ритуал для джентльменов.",
+    duration: "50 мин",
+    price: "2 500",
   },
   {
-    icon: Wind,
+    num: "04",
     name: "Укладка & стайлинг",
     desc: "Профессиональный стайлинг с продуктами премиум-брендов. Держится весь день.",
+    duration: "30 мин",
     price: "800",
   },
   {
-    icon: Star,
+    num: "05",
     name: "Комплекс «Всё включено»",
-    desc: "Стрижка + борода + бритьё + укладка. Полный джентльменский набор с чашкой кофе в подарок.",
-    price: "5 500",
+    desc: "Стрижка + борода + бритьё + укладка. Полный набор с кофе в подарок.",
+    duration: "2.5 ч",
+    price: "5 500",
+    featured: true,
   },
   {
-    icon: Baby,
+    num: "06",
     name: "Детская стрижка",
-    desc: "Мягкий подход, терпение и результат, который понравится папе и маме. Для мальчиков до 14 лет.",
-    price: "1 200",
+    desc: "Мягкий подход и терпение. Для мальчиков до 14 лет.",
+    duration: "40 мин",
+    price: "1 200",
   },
 ];
 
-function ServiceCard({
-  icon: Icon,
-  name,
-  desc,
-  price,
-  index,
+function ServiceRow({
+  num, name, desc, duration, price, featured, index,
 }: (typeof SERVICES)[0] & { index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
-
+  const inView = useInView(ref, { once: true, margin: "-60px 0px" });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
-      whileHover={{ y: -4 }}
+      transition={{ duration: 0.55, delay: index * 0.07 }}
       style={{
-        background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
-        borderRadius: "0.625rem",
-        padding: "2rem",
-        transition: "box-shadow 300ms",
+        display: "grid",
+        gridTemplateColumns: "3rem 1fr auto",
+        alignItems: "start",
+        gap: "0 2rem",
+        padding: "1.75rem 0",
+        borderBottom: "1px solid oklch(from var(--color-text) l c h / 0.07)",
+        cursor: "default",
       }}
+      className="service-row"
     >
-      <Icon
-        size={36}
-        style={{ color: "var(--color-primary)", marginBottom: "1.5rem" }}
-        aria-hidden
-      />
-      <h3
+      {/* Number */}
+      <span
         style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "var(--text-xl)",
+          fontFamily: "var(--font-playfair, Georgia, serif)",
+          fontSize: "var(--text-xs)",
           fontWeight: 400,
-          color: "var(--color-text)",
-          marginBottom: "0.75rem",
+          color: featured ? "var(--color-primary)" : "var(--color-text-faint)",
+          letterSpacing: "0.1em",
+          paddingTop: "0.2rem",
         }}
       >
-        {name}
-      </h3>
-      <p
-        style={{
-          fontSize: "var(--text-sm)",
-          color: "var(--color-text-muted)",
-          lineHeight: 1.65,
-          marginBottom: "1.5rem",
-        }}
-      >
-        {desc}
-      </p>
-      <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+        {num}
+      </span>
+
+      {/* Name + desc */}
+      <div>
+        <h3
+          style={{
+            fontFamily: "var(--font-playfair, Georgia, serif)",
+            fontSize: "var(--text-lg)",
+            fontWeight: 400,
+            color: "var(--color-text)",
+            marginBottom: "0.4rem",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {name}
+          {featured && (
+            <span
+              style={{
+                marginLeft: "0.75rem",
+                display: "inline-block",
+                fontSize: "var(--text-xs)",
+                fontFamily: "var(--font-body)",
+                fontWeight: 500,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--color-primary)",
+                border: "1px solid oklch(from var(--color-primary) l c h / 0.4)",
+                borderRadius: "var(--radius-full)",
+                padding: "0.15rem 0.6rem",
+                verticalAlign: "middle",
+              }}
+            >
+              Хит
+            </span>
+          )}
+        </h3>
+        <p
+          style={{
+            fontSize: "var(--text-sm)",
+            color: "var(--color-text-muted)",
+            lineHeight: 1.6,
+            maxWidth: "55ch",
+          }}
+        >
+          {desc}
+        </p>
         <span
           style={{
+            marginTop: "0.5rem",
+            display: "inline-block",
             fontSize: "var(--text-xs)",
             color: "var(--color-text-faint)",
             letterSpacing: "0.1em",
-            textTransform: "uppercase",
           }}
         >
-          от
+          {duration}
         </span>
+      </div>
+
+      {/* Price */}
+      <div style={{ textAlign: "right", paddingTop: "0.1rem" }}>
         <span
           style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "var(--text-lg)",
-            fontWeight: 600,
-            color: "var(--color-primary)",
+            fontFamily: "var(--font-playfair, Georgia, serif)",
+            fontSize: "var(--text-xl)",
+            fontWeight: 300,
+            color: featured ? "var(--color-primary)" : "var(--color-text)",
+            display: "block",
+            lineHeight: 1,
+            marginBottom: "0.2rem",
           }}
         >
           {price}
         </span>
         <span
-          style={{ fontSize: "var(--text-sm)", color: "var(--color-text-muted)" }}
+          style={{
+            fontSize: "var(--text-xs)",
+            color: "var(--color-text-faint)",
+            letterSpacing: "0.1em",
+          }}
         >
           ₽
         </span>
       </div>
+
+      <style>{`
+        .service-row:hover h3 { color: var(--color-primary); transition: color 200ms; }
+      `}</style>
     </motion.div>
   );
 }
 
 export function Services() {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const titleInView = useInView(titleRef, { once: true, margin: "-80px 0px" });
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true });
 
   return (
     <section
       id="services"
       aria-labelledby="services-title"
       style={{
-        padding: "clamp(4rem, 8vw, 8rem) 0",
+        padding: "clamp(5rem, 10vw, 10rem) 0",
         background: "var(--color-bg)",
       }}
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1100,
           margin: "0 auto",
           padding: "0 clamp(1.5rem, 5vw, 4rem)",
         }}
       >
-        <div style={{ marginBottom: "4rem" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              marginBottom: "1.5rem",
-            }}
-          >
-            <div
-              style={{
-                width: 32,
-                height: 1,
-                background: "var(--color-primary)",
-              }}
-              aria-hidden
-            />
-            <span
-              style={{
-                fontSize: "var(--text-xs)",
-                fontWeight: 500,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "var(--color-primary)",
-              }}
-            >
-              Услуги
-            </span>
-          </div>
+        {/* Header: asymmetric — title left, tagline right */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "2rem",
+            alignItems: "end",
+            marginBottom: "clamp(3rem, 5vw, 5rem)",
+            paddingBottom: "clamp(2rem, 4vw, 3.5rem)",
+            borderBottom: "1px solid oklch(from var(--color-text) l c h / 0.07)",
+          }}
+          className="services-header"
+        >
           <motion.h2
-            ref={titleRef}
+            ref={ref}
             id="services-title"
             initial={{ opacity: 0, y: 20 }}
-            animate={titleInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.65 }}
             style={{
-              fontFamily: "var(--font-display)",
+              fontFamily: "var(--font-playfair, Georgia, serif)",
               fontSize: "var(--text-2xl)",
               fontWeight: 300,
               color: "var(--color-text)",
-              marginBottom: "1rem",
+              letterSpacing: "-0.01em",
             }}
           >
-            Наши{" "}
+            Услуги &amp;&nbsp;
             <em style={{ fontStyle: "italic", color: "var(--color-primary)" }}>
-              процедуры
+              цены
             </em>
           </motion.h2>
           <p
             style={{
-              fontSize: "var(--text-base)",
+              fontSize: "var(--text-sm)",
               color: "var(--color-text-muted)",
-              maxWidth: "52ch",
-              lineHeight: 1.7,
+              lineHeight: 1.75,
+              maxWidth: "40ch",
             }}
           >
-            Каждая услуга — это ритуал. Используем только профессиональные продукты и инструменты высшего класса.
+            Каждая услуга — это ритуал. Только профессиональные инструменты и продукты высшего класса.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1.25rem",
-          }}
-          className="services-grid"
-        >
+        {/* Service list */}
+        <div>
           {SERVICES.map((s, i) => (
-            <ServiceCard key={s.name} {...s} index={i} />
+            <ServiceRow key={s.name} {...s} index={i} />
           ))}
         </div>
+
+        {/* CTA */}
+        <div style={{ marginTop: "3rem", textAlign: "right" }}>
+          <a
+            href="#booking"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "var(--text-xs)",
+              fontWeight: 500,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              borderBottom: "1px solid oklch(from var(--color-primary) l c h / 0.4)",
+              paddingBottom: "0.125rem",
+              transition: "border-color 200ms",
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.borderColor =
+                "var(--color-primary)")
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.borderColor =
+                "oklch(from var(--color-primary) l c h / 0.4)")
+            }
+          >
+            Записаться онлайн
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+        </div>
       </div>
+
       <style>{`
-        @media (max-width: 1024px) { .services-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 640px)  { .services-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 768px) {
+          .services-header { grid-template-columns: 1fr !important; }
+          .service-row { grid-template-columns: 2.5rem 1fr auto !important; gap: 0 1rem !important; }
+        }
       `}</style>
     </section>
   );

@@ -1,30 +1,48 @@
-export function Logo({ size = 36 }: { size?: number }) {
+export function Logo() {
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 36 36"
+      width="120"
+      height="32"
+      viewBox="0 0 120 32"
       fill="none"
-      aria-hidden="true"
+      aria-label="Duhovskoy Barbershop"
+      role="img"
     >
-      <rect
-        x="2" y="2" width="32" height="32" rx="4"
-        stroke="currentColor" strokeWidth="1.2" opacity="0.3"
+      {/* Razor blade mark */}
+      <path
+        d="M6 8 L14 16 L6 24 L2 20 L8 16 L2 12 Z"
+        fill="var(--color-primary)"
       />
       <path
-        d="M10 26L18 10L26 26"
+        d="M10 10 L16 16 L10 22"
         stroke="var(--color-primary)"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeWidth="1"
+        fill="none"
+        opacity="0.4"
       />
-      <path
-        d="M12.5 21H23.5"
-        stroke="var(--color-primary)"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-      <circle cx="18" cy="18" r="1.5" fill="var(--color-primary)" />
+      {/* Wordmark */}
+      <text
+        x="22"
+        y="13"
+        fontFamily="var(--font-playfair, Georgia, serif)"
+        fontSize="10"
+        fontWeight="400"
+        fill="var(--color-text)"
+        letterSpacing="0.12em"
+      >
+        DUHOVSKOY
+      </text>
+      <text
+        x="22"
+        y="25"
+        fontFamily="var(--font-body, sans-serif)"
+        fontSize="7"
+        fontWeight="400"
+        fill="var(--color-text-muted)"
+        letterSpacing="0.28em"
+      >
+        BARBERSHOP
+      </text>
     </svg>
   );
 }
